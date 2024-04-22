@@ -107,15 +107,16 @@ body {
 #log {
     margin-top: 30px;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.2em; /* Modifica el tamaño de fuente aquí */
     color: white;
 }
 
 #log span {
-    font-size: 2em;
+    font-size: 1em; /* Modifica el tamaño de fuente aquí */
     font-weight: bold;
     color: #57B3F9;
 }
+
 
 .btn-open {
     background-color: #ffac00;
