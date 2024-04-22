@@ -62,7 +62,7 @@ $(document).ready(function(){
                     var rightOffset = leftOffset + $(this).width();
                     if(leftOffset < center && rightOffset > center){
                         var text = $(this).find('.skin-name').text();
-                        $("#log").append("THE WINNER IS<br/> <span class=\"badge\">"+text+"</span>");
+                        $("#log").append("Has ganado:<br/> <span class=\"badge\">"+text+"</span>");
                         winnerFound = true;
                     }
                 }
