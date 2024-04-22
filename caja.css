@@ -25,7 +25,6 @@ body {
 }
 
 .topbox {
-    background: #0f161d;
     background: linear-gradient(to right, #0f161d 0%, #131b24 51%, #0f161d 100%);
     box-shadow: 0 0 10px 0 black;
     padding-bottom: 50px;
