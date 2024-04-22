@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="caja.css">
+    <title>CS:GO - Abrir Caja</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="caja.js"></script> 
+</head>
+<body>
+    <div class="container">
+        
+        <div class="row topbox">
+            <div class="col-md-6 col-md-offset-3 rollbox">
+                <div class="line"></div>
+                <table><tr id="loadout"></tr></table>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <button id="roll" class="btn-open form-control">Abrir Caja</button>
+                <div id="msgbox" class="alert alert-warning" style="margin-top:20px;display:none;">¡Necesitas agregar al menos 2 líneas!</div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12" id="log"></div>
+        </div>
+    </div>  
+</body>
+</html>
