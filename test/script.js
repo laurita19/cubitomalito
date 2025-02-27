@@ -34,6 +34,42 @@ var loadEndMsg = ""
 var loadFunction = ""
 var loadData = []
 
+const commands = [
+  "connect",
+  "disconnect",
+  "ls",
+  "cd",
+  "help",
+  "exit",
+  "clear",
+  "load",
+  "save",
+  "run",
+  "scan",
+  "link",
+  "reboot",
+  "discover",
+  "cmd",
+  "paste",
+  "sell",
+  "wepcrack",
+  "bank",
+  "trace",
+  "stoptrace",
+  "Usuarios",
+  "admin",
+  "Documentos",
+  "Descargas",
+  "Documentos",
+  "Aplicaciones",
+  "Programas",
+  "Bank.exe",
+  "Sell.exe",
+  "WEPCrack.exe",
+  "backdoor",
+  "shop.cmd",
+];
+
 // maneja la entrada del teclado.
 input.addEventListener("keydown", function(event) {
   switch (event.keyCode) {
@@ -91,6 +127,24 @@ input.addEventListener("keydown", function(event) {
         reset()
       }
       break
+    case 9: // Tab
+      if (event.key === "Tab") {
+        // Evitar el comportamiento predeterminado del Tab
+        event.preventDefault();
+        
+        // Obtener el texto actual del input
+        const currentInput = input.value;
+
+        // Encontrar coincidencias en los comandos
+        const matches = commands.filter(command => command.startsWith(currentInput));
+
+        // Si hay coincidencias, autocompletar
+        if (matches.length > 0) {
+            // Autocompletar con la primera coincidencia
+            input.value = matches[0];
+        }
+      }
+    break
   }
 })
 // Desconectar de la instancia actual.
