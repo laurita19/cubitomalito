@@ -1,0 +1,197 @@
+/*The main div.*/
+#main {
+  margin-left: auto;
+  margin-right: auto;
+}
+.este{
+  text-align: center;
+  margin-top: 0px;
+}
+.bodyclass{
+  background-color: black;
+}
+
+/*La entrada del archivo de carga.*/
+#loadInput {
+  margin-left: auto;
+  margin-right: auto;
+  color: transparent;
+}
+
+/*La información de posición de encerrado Div.*/
+#loadBox {
+  background-color: black;
+  border-style: solid;
+  border-radius: 5px 5px 5px 5px;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #0fdf1f;
+}
+
+/*El divir registros y la entrada de div.*/
+#console {
+  background-color: black;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-style: solid;
+  border-color: #0fdf1f;
+  border-radius: 0px 0px 5px 5px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*La información de posición de encerrado Div.*/
+#posBox {
+  background-color: black;
+  border-style: solid;
+  border-bottom-style: none;
+  border-radius: 5px 5px 0px 0px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #0fdf1f;
+}
+
+/*Estilización para párrafos de información de posición.*/
+.posDisplay {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 16.5px;
+  text-align: center;
+  margin-top: 2px;
+  margin-bottom: 0px;
+  margin-left: 4px;
+  margin-right: 4px
+}
+
+/*Borde superior para la información de posición.*/
+.posBorder {
+  border-top: solid 1px;
+}
+
+/*El div para registros.*/
+#logContainer {
+  background-color: black;
+  margin-bottom: 5px;
+  padding-bottom: 12.2px;
+  padding-top: 12.2px;
+  border-style: solid;
+  width: 475px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*Estilo para líneas de registros.*/
+.logText {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 16.5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #0fdf1f;
+}
+
+/*Cambio de color de fondo para líneas de registro visibles.*/
+.visible {
+  background-color: black;
+}
+
+/*Ambos estilo de borde para líneas de registro.*/
+.bothBorder {
+  height: 24.4px;
+  border-top: solid 1px;
+  border-bottom: solid 1px;
+}
+
+/*Estilo de borde inferior para líneas de registro.*/
+.bottomBorder {
+  height: 25.4px;
+  border-bottom: solid 1px;
+}
+
+/*Estilo de borde superior para líneas de registro.*/
+.topBorder {
+  height: 25.4px;
+  border-top: solid 1px;
+}
+
+/*Sin estilo de borde para líneas de registro.*/
+.noBorder {
+  height: 26.4px;
+}
+
+/*El cuadro de entrada del reproductor.*/
+#input {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 16.5px;
+  margin-top: 5px;
+  margin-left: 10px;
+  width: 473px;
+  height: 25px;
+  border: solid 3px;
+  border-color: 0fdf1f;
+  background-color: black;
+  color: #0fdf1f;
+}
+
+
+body{
+	background-color: rgb(0, 0, 0)
+}
+.hide{
+	display: none
+}
+#matrix {
+  position: fixed; /* Fija el fondo */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Ocupa todo el ancho */
+  height: 100vh; /* Ocupa todo el alto */
+  z-index: -1; /* Lo pone detrás de todo */
+  background-color: black; /* Fondo negro para mejorar el efecto */
+}
+
+		
+@keyframes blur {
+  0% {
+    filter: blur(5px);
+  }
+  2% {
+    filter: none;
+  }
+  5% {
+    filter: blur(5px);
+  }
+  7% {
+    filter: none;
+  }
+  10% {
+    filter: blur(5px);
+  }
+  12% {
+    filter: none;
+  }
+  58% {
+    filter: none;
+  }
+  60% {
+    filter: blur(3px);
+  }
+  62% {
+    filter: none;
+  }
+  65% {
+    filter: blur(5px);
+  }
+  67% {
+    filter: none;
+  }
+  69% {
+    filter: blur(3px);
+  }
+  72% {
+    filter: none;
+  }
+}
