@@ -35,39 +35,10 @@ var loadFunction = ""
 var loadData = []
 
 const commands = [
-  "connect",
-  "disconnect",
-  "ls",
-  "cd",
-  "help",
-  "exit",
-  "clear",
-  "load",
-  "save",
-  "run",
-  "scan",
-  "link",
-  "reboot",
-  "discover",
-  "cmd",
-  "paste",
-  "sell",
-  "wepcrack",
-  "bank",
-  "trace",
-  "stoptrace",
-  "Usuarios",
-  "admin",
-  "Documentos",
-  "Descargas",
-  "Documentos",
-  "Aplicaciones",
-  "Programas",
-  "Bank.exe",
-  "Sell.exe",
-  "WEPCrack.exe",
-  "backdoor",
-  "shop.cmd",
+  "connect", "disconnect", "ls", "cd", "help", "exit", "clear", "load", "save", "run",
+  "scan", "link", "reboot", "discover", "cmd", "paste", "sell", "wepcrack", "bank",
+  "trace", "stoptrace", "Usuarios", "admin", "Documentos", "Descargas", "Aplicaciones",
+  "Programas", "Bank.exe", "Sell.exe", "WEPCrack.exe", "backdoor", "shop.cmd",
 ];
 
 // maneja la entrada del teclado.
@@ -132,16 +103,17 @@ input.addEventListener("keydown", function(event) {
         // Evitar el comportamiento predeterminado del Tab
         event.preventDefault();
         
-        // Obtener el texto actual del input
         const currentInput = input.value;
-
-        // Encontrar coincidencias en los comandos
-        const matches = commands.filter(command => command.startsWith(currentInput));
-
-        // Si hay coincidencias, autocompletar
-        if (matches.length > 0) {
-            // Autocompletar con la primera coincidencia
-            input.value = matches[0];
+        const words = currentInput.split(" "); // Dividir la entrada en palabras
+        const lastWord = words[words.length - 1]; // Tomar la última palabra escrita
+  
+        if (lastWord.length > 0) { // Si hay algo que autocompletar
+          const matches = commands.filter(command => command.startsWith(lastWord));
+  
+          if (matches.length > 0) {
+            words[words.length - 1] = matches[0]; // Reemplazar solo la última palabra
+            input.value = words.join(" "); // Reconstruir la entrada con la palabra autocompletada
+          }
         }
       }
     break
