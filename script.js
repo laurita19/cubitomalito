@@ -33,12 +33,13 @@ var loadEndMsg = ""
 var loadFunction = ""
 var loadData = []
 var isOn = true
+let messageShown = false;
 
 const commands = [
   "connect", "disconnect", "ls", "cd", "help", "exit", "clear", "load", "save", "run",
   "scan", "link", "reboot", "discover", "cmd", "paste", "sell", "wepcrack", "bank",
   "trace", "stoptrace", "Usuarios", "admin", "Documentos", "Descargas", "Aplicaciones",
-  "Programas", "Bank.exe", "Sell.exe", "WEPCrack.exe", "backdoor", "shop.cmd",
+  "Programas", "Bank.exe", "Sell.exe", "WEPCrack.exe", "backdoor", "shop.cmd", "shutdown", "dir"
 ];
 
 // maneja la entrada del teclado.
@@ -61,10 +62,13 @@ input.addEventListener("keydown", function(event) {
         } else {
           noCommand = false
         }
-      }}else{
-        addLog("El sistema esta apagado")
-      }
-      break
+      }}else {
+        if (!messageShown) {
+            addLog("El sistema está apagado");
+            messageShown = true;
+        }
+    }
+    break
     case 27: // Escape
       event.preventDefault()
       input.value = ""
@@ -104,13 +108,12 @@ input.addEventListener("keydown", function(event) {
     case 36: // Control + Home
       if (event.key === "Home") {
         if (isOn){
-
         }else{
         event.preventDefault()
-        addLoadingBar("Iniciando Sistema", 2000, "", "clearLogs")
+        addLoadingBar("Iniciando", 2000, "", "clearLogs")
         setTimeout(() => {
           addLog("Sistema iniciado.")
-        }, 3000);
+        }, 2000);
         isOn = true
         }
       }
@@ -385,7 +388,7 @@ function doBank(command) {
         break
       }
       clearLogs()
-      networks[bankIP].data.accounts[networks[bankIP].data.tempUser] = [parsed, 10]
+      networks[bankIP].data.accounts[networks[bankIP].data.tempUser] = [parsed, 100]
       addLog(["Created user '" + networks[bankIP].data.tempUser + "'."])
       addLog(line)
       networks[bankIP].data.pos = 0
@@ -1607,7 +1610,8 @@ function parseCommand(command) {
         }
         break
         }
-      case "ls": // ls [INT]
+      case "ls":
+      case "dir": // ls [INT]
         if (1 === 1) {
         if (array.length > 2) {
           fail = 2
@@ -2189,7 +2193,7 @@ function save() {
   file[0].shift()
   file[0].shift()
   file[0].push(["", "logText noBorder"], ["Estado del sistema guardado.", "logText bothBorder visible"])
-  download("save.hck", JSON.stringify(file))
+  download("save.pepev", JSON.stringify(file))
 }
 
 // Descargas a file.
