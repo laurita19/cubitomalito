@@ -22,7 +22,6 @@ var currentPos = -1
 var pauseReason = null
 var inParse = false
 var commandQueue = []
-
 // bool para no ingresar al comando.
 var noCommand = false
 // Variables de barra de carga.
@@ -33,6 +32,7 @@ var loadTitle = ""
 var loadEndMsg = ""
 var loadFunction = ""
 var loadData = []
+var isOn = true
 
 const commands = [
   "connect", "disconnect", "ls", "cd", "help", "exit", "clear", "load", "save", "run",
@@ -46,6 +46,7 @@ input.addEventListener("keydown", function(event) {
   switch (event.keyCode) {
     case 13: // Enter
       event.preventDefault()
+      if (isOn){
       if (pauseReason === null && !inParse && commandQueue.length <= 0) {
         parseInput(input.value)
         if (!noCommand) {
@@ -60,6 +61,8 @@ input.addEventListener("keydown", function(event) {
         } else {
           noCommand = false
         }
+      }}else{
+        addLog("El sistema esta apagado")
       }
       break
     case 27: // Escape
@@ -96,6 +99,20 @@ input.addEventListener("keydown", function(event) {
       if (event.ctrlKey) {
         event.preventDefault()
         reset()
+      }
+      break
+    case 36: // Control + Home
+      if (event.key === "Home") {
+        if (isOn){
+
+        }else{
+        event.preventDefault()
+        addLoadingBar("Iniciando Sistema", 2000, "", "clearLogs")
+        setTimeout(() => {
+          addLog("Sistema iniciado.")
+        }, 3000);
+        isOn = true
+        }
       }
       break
     case 9: // Tab
@@ -750,6 +767,21 @@ function parseCommand(command) {
           }
           break
         }
+      case "shutdown":
+        if (1 === 1) {
+          if (array.length > 1) {
+            fail = 2
+            break
+          }
+          if (currentMAC === playerHost) {
+            addLoadingBar("Apagando", 2000, "", "clearLogs")
+            setTimeout(() => {
+              addLog("Sistema apagado, pulse 'Inicio' para encenderlo.")
+            }, 2000);
+            isOn = false
+          }
+          break
+      }
       case "link": // link add <STR> <IP> [MAC] / link list [INT] / link target <INT> / link remove <INT> / link clear
         if (1 === 1) {
           if (array.length < 2) {
@@ -1622,6 +1654,25 @@ function parseCommand(command) {
         }
         break
         }
+      
+        if (1 === 1) {
+          if (array.length > 1) {
+            fail = 2
+            break
+          }
+          clearLogs()
+          break
+      }
+      case "cls": // cls
+      case "clear": // clear
+        if (1 === 1) {
+          if (array.length > 1) {
+            fail = 2
+            break
+          }
+          clearLogs()
+          break
+        }
       case "cd": // cd [directory]
         if (1 === 1) {
         if (array.length > 2) {
@@ -2137,7 +2188,7 @@ function save() {
   }
   file[0].shift()
   file[0].shift()
-  file[0].push(["", "logText noBorder"], ["Estado de computadora guardado.", "logText bothBorder visible"])
+  file[0].push(["", "logText noBorder"], ["Estado del sistema guardado.", "logText bothBorder visible"])
   download("save.hck", JSON.stringify(file))
 }
 
@@ -2157,16 +2208,22 @@ var currentLoaded = []
 
 // Mounts a save file to currentLoaded.
 function mount(event) {
-  var file = event.target.files[0]
+  var file = event.target.files[0];
   if (file) {
-    var reader = new FileReader()
-    reader.onload = function(event) { 
-      var contents = event.target.result
-      currentLoaded = JSON.parse(contents)
-    }
-    reader.readAsText(file)
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      var contents = event.target.result;
+      try {
+        currentLoaded = JSON.parse(contents);
+        load(); // llama a la función load() para establecer el estado del juego
+      } catch (error) {
+        console.error("Error al cargar el archivo:", error);
+        addLog("ERROR - El archivo no se pudo cargar correctamente.");
+      }
+    };
+    reader.readAsText(file);
   } else { 
-    console.warn("No se pudo cargar el archivo.")
+    console.warn("No se pudo cargar el archivo.");
   }
 }
 
@@ -2192,31 +2249,42 @@ function discover() {
 
 // Loads the mounted save file.
 function load() {
-  for (var i = 0; i < currentLoaded[0].length; i++) {
-    logs[i].innerHTML = currentLoaded[0][i][0]
-    logs[i].className = currentLoaded[0][i][1]
+  // Asegúrate de que el contenido cargado sea válido
+  console.log(currentLoaded); // Aquí puedes verificar el estado cargado
+  
+  clearLogs(); // Limpia cualquier contenido anterior
+  // Asegúrate de que currentLoaded tenga la longitud y los campos correctos
+  if (currentLoaded.length < 23) {
+    console.error("El archivo no tiene la estructura esperada.");
+    return; // O maneja el error de alguna manera
   }
-  prevCommands = currentLoaded[1]
-  currentPos = currentLoaded[2]
-  networks = currentLoaded[3]
-  devices = currentLoaded[4]
-  connect(currentLoaded[5],currentLoaded[6])
-  currentBank = currentLoaded[7]
-  setFilePath(currentLoaded[8])
-  prevFilePath = currentLoaded[9]
-  playerNetwork = currentLoaded[10]
-  playerHost = currentLoaded[11]
-  storedIP = currentLoaded[12]
-  storedMAC = currentLoaded[13]
-  storedFile = currentLoaded[14]
-  bookmarks = currentLoaded[15]
-  usedIPs = currentLoaded[16]
-  bankIP = currentLoaded[17]
-  shopIP = currentLoaded[18]
-  fenceIP = currentLoaded[19]
-  events = currentLoaded[20]
-  currentUID = currentLoaded[21]
-  soldUIDs = currentLoaded[22]
+
+  for (var i = 0; i < currentLoaded[0].length; i++) {
+    logs[i].innerHTML = currentLoaded[0][i][0];
+    logs[i].className = currentLoaded[0][i][1];
+  }
+  
+  prevCommands = currentLoaded[1];
+  currentPos = currentLoaded[2];
+  networks = currentLoaded[3];
+  devices = currentLoaded[4];
+  connect(currentLoaded[5], currentLoaded[6]);
+  currentBank = currentLoaded[7];
+  setFilePath(currentLoaded[8]);
+  prevFilePath = currentLoaded[9];
+  playerNetwork = currentLoaded[10];
+  playerHost = currentLoaded[11];
+  storedIP = currentLoaded[12];
+  storedMAC = currentLoaded[13];
+  storedFile = currentLoaded[14];
+  bookmarks = currentLoaded[15];
+  usedIPs = currentLoaded[16];
+  bankIP = currentLoaded[17];
+  shopIP = currentLoaded[18];
+  fenceIP = currentLoaded[19];
+  events = currentLoaded[20];
+  currentUID = currentLoaded[21];
+  soldUIDs = currentLoaded[22];
 }
 
 // Initialising game data variables.
@@ -2824,7 +2892,7 @@ function rain() {
 	}
 };
 
-function run() {
-	setInterval(rain, speed);
-}
-run();
+// function run() {
+// 	setInterval(rain, speed);
+// // }
+// run();

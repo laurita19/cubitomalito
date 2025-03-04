@@ -6,12 +6,11 @@
   <link rel="stylesheet" href="./style.css">
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 </head>
-<body><br><br><br>
 <!-- partial:index.partial.html -->
 <body class="bodyclass">
   <canvas id='matrix'></canvas>
-<div id="main">
-  <div class="este">  <img style="width: 15%;" src="favicon.png" alt="">
+  <div class="este">  <img style="width: 15%;" src="favicon.png" alt=""> </div>
+  <div id="main">
   </div>
   <div id="posBox">
     <p class="posDisplay"><b>IP:</b></p>
@@ -45,8 +44,10 @@
   </div>
   <br/>
   <div id="loadBox">
-    <p class="posDisplay" style="text-align: left"><b>Saves antiguos:</b></p>
-    <input type="file" id="loadInput"/>
+    <label for="loadInput" class="custom-file-upload">
+      Cargar partida guardada
+  </label>
+  <input type="file" id="loadInput" class="file-input" />
   </div>
 </div>
   <script  src="./script.js"></script>

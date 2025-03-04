@@ -5,7 +5,7 @@
 }
 .este{
   text-align: center;
-  margin-top: 0;
+  margin-top: 0px;
 }
 .bodyclass{
   background-color: black;
@@ -16,6 +16,25 @@
   margin-left: auto;
   margin-right: auto;
   color: transparent;
+}
+input[type="file"] {
+  display: none; /* Ocultar el input de file predeterminado */
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 260px;
+  background-color: #0fdf1f; /* Color de fondo azul */
+  color: black; /* Color del texto */
+  font-size: 16px; /* Tamaño de fuente */
+  text-align: center; /* Centrar el texto */
+  transition: background-color 0.3s; /* Transición suave para el color de fondo */
+}
+
+.custom-file-upload:hover {
+  background-color: #0a9e16; /* Color más oscuro al pasar el mouse */
 }
 
 /*La información de posición de encerrado Div.*/
