@@ -39,7 +39,8 @@ const commands = [
   "connect", "disconnect", "ls", "cd", "help", "exit", "clear", "load", "save", "run",
   "scan", "link", "reboot", "discover", "cmd", "paste", "sell", "wepcrack", "bank",
   "trace", "stoptrace", "Usuarios", "admin", "Documentos", "Descargas", "Aplicaciones",
-  "Programas", "Bank.exe", "Sell.exe", "WEPCrack.exe", "backdoor", "shop.cmd", "shutdown", "dir"
+  "Programas", "Bank.exe", "Sell.exe", "WEPCrack.exe", "backdoor", "shop.cmd", "shutdown", "dir", "System",
+  "os.bin"
 ];
 
 // maneja la entrada del teclado.
@@ -47,6 +48,9 @@ input.addEventListener("keydown", function(event) {
   switch (event.keyCode) {
     case 13: // Enter
       event.preventDefault()
+      localStorage.setItem("prevCommands", JSON.stringify(prevCommands));
+      var storedCommands = localStorage.getItem("prevCommands");
+      console.log(storedCommands);
       if (isOn){
       if (pauseReason === null && !inParse && commandQueue.length <= 0) {
         parseInput(input.value)
@@ -142,7 +146,7 @@ input.addEventListener("keydown", function(event) {
 // Desconectar de la instancia actual.
 function disconnect() {
   instance = null
-  addLoadingBar("Culling", 500, "Desconectado del servidor remoto.", "connect", [playerNetwork, playerHost])
+  addLoadingBar("Saliendo", 500, "Desconectado del servidor remoto.", "connect", [playerNetwork, playerHost])
 }
 
 // Pase la entrada del usuario.
@@ -228,12 +232,12 @@ function doFence(command) {
       clearLogs()
       var Descargas = navigateObject(devices[playerHost].files, ["Usuarios","admin","Descargas"])
       if (Descargas === undefined || Descargas.type !== undefined) {
-        addLog("ERROR - Carpeta 'Descargas' nonexistant.")
+        addLog("ERROR - Carpeta 'Descargas' no existe.")
         addLog(line)
         break
       }
       copyFile(networks[fenceIP].data.files["Sell.exe"], Descargas, "Sell.exe")
-      addLoadingBar("Grabbing", 3000, [["Copiado 1 elemento a Descargas"], line], "clearLogs")
+      addLoadingBar("Copiando", 3000, [["Copiado 1 elemento a Descargas"], line], "clearLogs")
       break
     default:
       noCommand = true
@@ -270,7 +274,7 @@ function doShop(command) {
             break
           }
           copyFile(networks[shopIP].data.files["shop.cmd"], Descargas, "shop.cmd")
-          addLoadingBar("Grabbing", 3000, [["Copiado 1 elemento a Descargas"], line], "clearLogs")
+          addLoadingBar("Copiando", 3000, [["Copiado 1 elemento a Descargas"], line], "clearLogs")
           break
         default:
           noCommand = true
@@ -313,7 +317,7 @@ function doShop(command) {
         networks[bankIP].data.accounts[currentBank][1] -= networks[shopIP].data.items[Number(part)][1]
         clearLogs()
         copyFile(networks[shopIP].data.items[Number(part)][2], Descargas, networks[shopIP].data.items[Number(part)][0] + ".exe")
-        addLoadingBar("Grabbing", 3000, ["Copiado 1 elemento a Descargas"], "printShop")
+        addLoadingBar("Copiando", 3000, ["Copiado 1 elemento a Descargas"], "printShop")
       }
       break
   }
@@ -349,7 +353,7 @@ function doBank(command) {
             break
           }
           copyFile(networks[bankIP].data.files["Bank.exe"], Descargas, "Bank.exe")
-          addLoadingBar("Grabbing", 3000, [["Copiado 1 elemento a Descargas"], line], "clearLogs")
+          addLoadingBar("Copiando", 3000, [["Copiado 1 elemento a Descargas"], line], "clearLogs")
           break
         default:
           noCommand = true
@@ -489,7 +493,7 @@ function parseCommand(command) {
             break
           }
           if (networks[ip].security !== 1) {
-            addLog("ERROR - Network not using WEP security.")
+            addLog("ERROR - La red no usa la seguridad de WEP.")
             fail = -1
             break
           }
@@ -536,17 +540,17 @@ function parseCommand(command) {
             }
             var Descargas = navigateObject(devices[playerHost].files, ["Usuarios","admin","Descargas"])
             if (Descargas === undefined) {
-              addLog("Carpeta 'Descargas' not encontrado.")
+              addLog("Carpeta 'Descargas' no encontrado.")
               fail = -1
               break
             }
             if (!networks[ip].hacked) {
-              addLog("ERROR - Network has not been cracked.")
+              addLog("ERROR - La red no se ha craqueado.")
               fail = -1
               break
             }
             copyFile({lootTag: "backdoor", ip: ip, uid: networks[ip].uid, type: "static"}, Descargas, networks[ip].name.replace(/ /g, "_").toLowerCase().replace(/[^abcdefghijklmnopqrstuvwxyz0123456789_]/g, "") + ".wepbd")
-            addLoadingBar("Descargando", 3000, "WEP backdoor file created in 'Descargas'.")
+            addLoadingBar("Descargando", 3000, "WEP Archivo de puerta trasera creada en 'Descargas'.")
             console.log(Descargas)
           } else {
             fail = 1
@@ -560,7 +564,7 @@ function parseCommand(command) {
             fail = 2
             break
           }
-          addLoadingBar("Scanning", 5000, "Discovered 3 new networks and added them as enlaces.", "discover")
+          addLoadingBar("Escaneando", 5000, "Descubiertas 3 nuevas redes y añadidas como enlaces.", "discover")
           break
         }
       case "load": // load
@@ -571,10 +575,10 @@ function parseCommand(command) {
           }
           if (currentLoaded.length === 0) {
             fail = -1
-            addLog("ERROR - No device savestate mounted.")
+            addLog("ERROR - No hay ningún dispositivo guardado en el estado montado.")
             break
           }
-          addLoadingBar("Loading", 5000, "","load")
+          addLoadingBar("Cargando", 5000, "","load")
           break
         }
       case "save": // save
@@ -583,7 +587,7 @@ function parseCommand(command) {
             fail = 2
             break
           }
-          addLoadingBar("Saving", 5000, "Saved device state.", "save")
+          addLoadingBar("Saving", 5000, "Estado de dispositivo guardado.", "save")
           break
         }
       case "bank": // bank login <name> <password> / bank logout / bank balance / bank transfer <name> <INT>
@@ -608,18 +612,18 @@ function parseCommand(command) {
                 break
               }
               if (currentBank !== "") {
-                addLog("ERROR - Already logged in to bank account.")
+                addLog("ERROR - Ya se inició sesión en la cuenta bancaria.")
                 fail = -1
                 break
               }
               var account = networks[bankIP].data.accounts[array[2]]
               if (account === undefined) {
-                addLog("ERROR - Account name does not exist.")
+                addLog("ERROR - El nombre de la cuenta no existe.")
                 fail = -1
                 break
               }
               if (account[0] !== array[3]) {
-                addLog("ERROR - Password does not match account name.")
+                addLog("ERROR - La contraseña no coincide con el nombre de la cuenta.")
                 fail = -1
                 break
               }
@@ -632,11 +636,11 @@ function parseCommand(command) {
                 break
               }
               if (currentBank === "") {
-                addLog("ERROR - Not logged in to bank account.")
+                addLog("ERROR -No hay sesión iniciada en la cuenta bancaria.")
                 fail = -1
                 break
               }
-              addLog("Logged out of '" + currentBank + "'.")
+              addLog("Cerrando sesión de '" + currentBank + "'.")
               currentBank = ""
               break
             case "balance":
@@ -645,7 +649,7 @@ function parseCommand(command) {
                 break
               }
               if (currentBank === "") {
-                addLog("ERROR - Not logged in to bank account.")
+                addLog("ERROR - No hay sesión iniciada en la cuenta bancaria.")
                 fail = -1
                 break
               }
@@ -661,18 +665,18 @@ function parseCommand(command) {
                 break
               }
               if (currentBank === "") {
-                addLog("ERROR - Not logged in to bank account.")
+                addLog("ERROR - No hay sesión iniciada en la cuenta bancaria.")
                 fail = -1
                 break
               }
               if (array[2] === currentBank) {
-                addLog("ERROR - Cannot transfer money to self.")
+                addLog("ERROR - No se puede transferir dinero a sí mismo.")
                 fail = -1
                 break
               }
               var accounts = networks[bankIP].data.accounts
               if (accounts[array[2]] === undefined) {
-                addLog("ERROR - Account name does not exist.")
+                addLog("ERROR - El nombre de la cuenta no existe.")
                 fail = -1
                 break
               }
@@ -806,7 +810,7 @@ function parseCommand(command) {
                 break
               }
               if (bookmarks.length > 255) {
-                addLog("ERROR - Enlace capacity reached.")
+                addLog("ERROR - Capacidad de enlaces alcanzado.")
                 fail = -1
                 break
               }
@@ -862,7 +866,7 @@ function parseCommand(command) {
               }
               var list = printHelp("Enlaces:", data, index, 10)
               if (list !== null) {
-                addLoadingBar("Collecting", 300, list)
+                addLoadingBar("Cargando", 300, list)
               } else {
                 fail = 12
                 break
@@ -918,7 +922,7 @@ function parseCommand(command) {
                 break
               }
               bookmarks = []
-              addLoadingBar("Collecting", 1000, "Enlaces limpiados.")
+              addLoadingBar("Cargando", 1000, "Enlaces limpiados.")
               break
             default:
               fail = 1
@@ -972,7 +976,7 @@ function parseCommand(command) {
               }
               var list = printHelp("Programas:", data, index, 10)
               if (list !== null) {
-                addLoadingBar("Collecting", 300, list)
+                addLoadingBar("Cargando", 300, list)
               } else {
                 fail = 12
                 break
@@ -1104,15 +1108,15 @@ function parseCommand(command) {
               count++
             }
             if (count === 0) {
-              addLoadingBar("Grabbing", 300, "No hay artículos copiados.")
+              addLoadingBar("Copiando", 300, "No hay artículos copiados.")
             } else if (count === 1) {
-              addLoadingBar("Grabbing", 3000, "Copiado 1 elemento a Descargas")
+              addLoadingBar("Copiando", 3000, "Copiado 1 elemento a Descargas")
             } else {
-              addLoadingBar("Grabbing", 3000 * count, "Copiado " + count + " elementos a Descargas.")
+              addLoadingBar("Copiando", 3000 * count, "Copiado " + count + " elementos a Descargas.")
             }
           } else if (pos[array[1]] !== undefined) {
             copyFile(pos[array[1]], Descargas, array[1])
-            addLoadingBar("Grabbing", 3000, "Copiado 1 elemento a Descargas")
+            addLoadingBar("Copiando", 3000, "Copiado 1 elemento a Descargas")
           } else {
             fail = 13
             break
@@ -1427,7 +1431,7 @@ function parseCommand(command) {
                   break
                 }
               }
-              addLoadingBar("Collecting", 300, string)
+              addLoadingBar("Cargando", 300, string)
               break
             case "clear":
               admin.data = []
@@ -1498,7 +1502,7 @@ function parseCommand(command) {
           }
           message.push(devices[mac].name + ": (" + getMAC(mac) + ")", devices[mac].description)
         }
-        addLoadingBar("Grabbing", 500, message)
+        addLoadingBar("Copiando", 500, message)
         break
         }
       case "disconnect": // disconnect
@@ -1651,7 +1655,7 @@ function parseCommand(command) {
         }
         var list = printHelp(getFilePath(filePath), data, index, 10)
         if (list !== null) {
-          addLoadingBar("Collecting", 300, list)
+          addLoadingBar("Cargando", 300, list)
         } else {
           fail = 12
           break
@@ -1771,7 +1775,7 @@ function parseCommand(command) {
                 }
                 help = printHelp("Comandos básicos:",["help","ls","cd","rm","connect","disconnect","read","make","file","target","scp","dup","name","copy","paste","cmd","link","reboot","scan","save","load","discover"], index)
                 if (help !== null) {
-                  addLoadingBar("Collecting", 300, help)
+                  addLoadingBar("Cargando", 300, help)
                 }
                 break
               case "apps":
@@ -1795,7 +1799,7 @@ function parseCommand(command) {
                 }
                 help = printHelp("Comandos de aplicación:", array, index)
                 if (help !== null) {
-                  addLoadingBar("Collecting", 300, help)
+                  addLoadingBar("Cargando", 300, help)
                 }
                 break
               default:
@@ -1934,7 +1938,7 @@ function addBookmarks(array) {
       return false
     }
   }
-  addLog("Añadido " + count + " bookmarks.")
+  addLog("Añadido " + count + " marcadores.")
   return true
 }
 
@@ -2010,13 +2014,13 @@ function isNumber(string, offset = 0) {
 // Creates a help string from a number and an array.
 function printHelp(title, data, number, length = 5) {
   if (data.length === 0) {
-    return [title + " (Página 1 of 1)"]
+    return [title + " (Página 1 de 1)"]
   }
   number -= 1
   if (number >= data.length / length) {
     return null
   }
-  var text = [title + " (Página " + (number + 1) + " of " + Math.ceil(data.length / length) + ")"]
+  var text = [title + " (Página " + (number + 1) + " de " + Math.ceil(data.length / length) + ")"]
   for (var i = length * number; i < length * number + length; i++) {
     if (i >= data.length) {
       break
